@@ -3,17 +3,19 @@
 import sys
 import pandas as pd
 import sqlalchemy
+import config
 
 
 def main(csv_filename):
     """ETLs specified csv file to DB"""
-    import_from_csv(csv_filename)
-
-
-def import_from_csv(csv_filename):
-    """Imports data from csv file"""
     data_frame = pd.read_csv(csv_filename)
-    conn = sqlalchemy.create_engine('mysql+mysqlconnector://admin:master123@localhost:3306/snap', echo=False)
+    mysql_host = 'mysql+mysqlconnector://' \
+                 + config.USER + ':' \
+                 + config.PASSWORD + '@' \
+                 + config.HOST + ':' \
+                 + str(config.PORT) + '/' \
+                 + config.DB
+    conn = sqlalchemy.create_engine(mysql_host, echo=False)
     data_frame.to_sql(name='jobs',
                       con=conn,
                       if_exists='replace',

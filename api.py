@@ -1,5 +1,6 @@
 from flask import Flask
 import pymysql
+import config
 
 app = Flask(__name__)
 
@@ -7,11 +8,11 @@ app = Flask(__name__)
 @app.route('/jobs/<location>')
 def jobs(location):
     conn = pymysql.connect(
-        host='localhost',
-        port=3306,
-        user='admin',
-        password='master123',
-        db='snap',
+        host=config.HOST,
+        port=config.PORT,
+        user=config.USER,
+        password=config.PASSWORD,
+        db=config.DB,
         cursorclass=pymysql.cursors.DictCursor)
     with conn.cursor() as cursor:
         sql = "SELECT * FROM `jobs` WHERE `Location` LIKE %s"
